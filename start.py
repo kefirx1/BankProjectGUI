@@ -9,9 +9,8 @@ def authentication(master, loginE, passwordE, l1):
     try:
         myBase=p.connect(host="localhost", user="root", db="bank")
     except:
-        print("Nie udało się połączyć z bazą danych")
-        time.sleep(2)
-        sys.exit()
+        l1.config(text="Nie udało się połączyć z bazą danych")
+        master.after(4000, master.destroy)
     cursor = myBase.cursor()
 
     #Authentication
