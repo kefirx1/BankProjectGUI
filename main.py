@@ -4,10 +4,11 @@ import pymysql as p
 import start
 
 
-class PinFrame():
+class StartFrame():
     def __init__(self, master):
         #Create frame
         self.master = master
+        self.master.title("BANK - pin")
         self.master.minsize(500, 400)
         self.master.maxsize(500, 400)
         self.fMain = Frame(self.master, width=500, height=400)
@@ -19,12 +20,14 @@ class PinFrame():
         self.passwordE = Entry(self.fMain, show="*")
         self.l1 = Label(self.fMain, text="Wprowadz poprawny login i hasło")
         self.confirmB = Button(self.fMain, text="Zaloguj", command=lambda:self.checkLogin())
+        self.exitB = Button(self.fMain, text="Wyjdź", command= lambda: self.master.destroy())
         self.loginL.grid(column=0, row=0)
         self.passwordL.grid(column=0, row=1)
         self.loginE.grid(column=1, row=0)
         self.passwordE.grid(column=1, row=1)
         self.l1.grid(row=3, columnspan=2)
         self.confirmB.grid( row=4, columnspan=2)
+        self.exitB.grid(row=5, columnspan=2)
 
 
     def checkLogin(self):
@@ -41,7 +44,7 @@ class PinFrame():
         self.confirmB.destroy()
         mainMenu=MainFrame(self.master, self.number)
 
-class MainFrame(PinFrame):
+class MainFrame(StartFrame):
     def __init__(self, master, number):
         #Create frame
         self.number = number
@@ -107,7 +110,7 @@ class MainFrame(PinFrame):
         self.infoB.destroy()
         self.logoutB.destroy()
         self.exitB.destroy()
-        PinFrame.__init__(self, self.master) 
+        StartFrame.__init__(self, self.master) 
     
     def exitF(self):
         self.l1.destroy()
@@ -279,29 +282,27 @@ class History (MainFrame):
             self.errorL.grid()
             self.returnB2.grid()
         else:
+            #Create scrollbra
+            self.scrollbar = Scrollbar(self.fMainH)
+            self.scrollbar.pack( side = RIGHT, fill = Y )
+            self.historyList = Listbox(self.fMainH, yscrollcommand = self.scrollbar.set )
             #Print history
             for i in range(counter):
-                self.counterL = Label(self.fMainH, text="Przelew nr {}".format(i+1))
-                self.theDateL = Label(self.fMainH, text="Data: {}".format(theDate[i]))
-                self.accountNumberLH = Label(self.fMainH, text="Adres: {}".format(accountNumber[i]))
-                self.amountL = Label(self.fMainH, text="Kwota: {} zł".format(amount[i]))
-                self.commentL = Label(self.fMainH, text="Komentarz: {}".format(comment[i]))
-                self.counterL.grid()
-                self.theDateL.grid()
-                self.accountNumberLH.grid()
-                self.amountL.grid()
-                self.commentL.grid()
+                self.historyList.insert(END, "Przelew nr {}".format(i+1))
+                self.historyList.insert(END, "Data: {}".format(theDate[i]))
+                self.historyList.insert(END, "Adres: {}".format(accountNumber[i]))
+                self.historyList.insert(END, "Kwota: {} zł".format(amount[i]))
+                self.historyList.insert(END, "Komentarz: {}".format(comment[i]))
+            self.historyList.pack( side = LEFT, fill = BOTH )
+            self.scrollbar.config( command = self.historyList.yview )
             self.returnB = Button(self.fMainH, text="Powrót", command=lambda: self.returnF(master, number))
-            self.returnB.grid()
+            self.returnB.pack(side=BOTTOM)
 
     def returnF(self, master, number):
 
         self.fMainH.destroy()
-        self.counterL.destroy()
-        self.theDateL.destroy()
-        self.accountNumberLH.destroy()
-        self.amountL.destroy()
-        self.commentL.destroy()
+        self.scrollbar.destroy()
+        self.historyList.destroy()
         self.returnB.destroy()
         MainFrame.__init__(self, master, number)
     
@@ -348,6 +349,7 @@ class Transfer (MainFrame):
             self.comL = Label(self.fMainT, text="Komentarz do przelewu")
             self.comE = Entry(self.fMainT)
             self.confirmB = Button(self.fMainT, text="Wyślij", command = lambda: self.confirmF(master, number))
+            self.returnB = Button(self.fMainT, text="Powrót", command = lambda: self.returnF(master, number))
             self.accountBalanceLT.grid(row=0, columnspan=2)
             self.nrOfTL.grid(row=1, column=0)
             self.nrOfTE.grid(row=1, column=1)
@@ -356,15 +358,16 @@ class Transfer (MainFrame):
             self.comL.grid(row=3, column=0)
             self.comE.grid(row=3, column=1)
             self.confirmB.grid(row=4, columnspan=2)
+            self.returnB.grid(row=5, columnspan=2)
 
     def confirmF(self, master, number):
         if int(self.howMuchE.get()) > self.accountBalance:
             self.errorLabel= Label(self.fMainT, text="Podana kwota jest większa od stanu konta")
-            self.errorLabel.grid(row=5, columnspan=2)
+            self.errorLabel.grid(row=6, columnspan=2)
             return
         else:
             self.transferL = Label(self.fMainT, text="Wysyłanie przelewu pod numer: {}, o kwocie: {} zł, z komentarzem: {}".format(self.nrOfTE.get(),self.howMuchE.get(), self.comE.get()))
-            self.transferL.grid(row=5, columnspan=2)
+            self.transferL.grid(row=6, columnspan=2)
             #change balance
             self.accountBalance -= int(self.howMuchE.get())
             self.cursor.execute("UPDATE data SET balance = {} WHERE number={}".format(self.accountBalance, number))
@@ -385,17 +388,13 @@ class Transfer (MainFrame):
         self.comL.destroy()
         self.comE.destroy()
         self.confirmB.destroy()
-        self.transferL.destroy()
+        try:
+            self.transferL.destroy()
+        except:
+            pass
+        self.returnB.destroy()
         MainFrame.__init__(self, master, number)
-    
 
-
-
-root = Tk()
-root.minsize(500, 400)
-root.maxsize(500, 400)
-root.title("BANK - pin")
-  
-framePin = PinFrame(root)
-
+root = Tk()  
+framePin = StartFrame(root)
 root.mainloop()
