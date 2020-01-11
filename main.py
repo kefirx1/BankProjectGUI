@@ -61,11 +61,11 @@ class MainFrame(StartFrame):
         except:
             self.connectionErrorL = Label(self.fMainB, text="Nie udało się połączyć z bazą danych")
             self.connectionErrorL.grid()
-            master.after(4000, master.destroy)
+            self.master.after(4000, self.master.destroy)
         cursor = myBase.cursor()
 
         #checking balance
-        cursor.execute("SELECT balance FROM data WHERE number={}".format(number))
+        cursor.execute("SELECT balance FROM data WHERE number={}".format(self.number))
         accountBalanceB = cursor.fetchall()
         for ch in accountBalanceB:
             for v in ch:
@@ -126,6 +126,8 @@ class MainFrame(StartFrame):
 
 class Info(MainFrame):
     def __init__(self, master,number):
+        self.master = master
+        self.number = number
         #Create frame
         self.fMainI = Frame(master)
         self.fMainI.pack()
@@ -135,53 +137,53 @@ class Info(MainFrame):
         except:
             self.connectionErrorL = Label(self.fMainI, text="Nie udało się połączyć z bazą danych")
             self.connectionErrorL.grid()
-            master.after(4000, master.destroy)
+            self.master.after(4000, self.master.destroy)
         cursor = myBase.cursor()
 
         #import login
-        cursor.execute("SELECT login FROM data WHERE number = {}".format(number))
+        cursor.execute("SELECT login FROM data WHERE number = {}".format(self.number))
         loginT=cursor.fetchall()
         for ch in loginT:
             for v in ch:
                 login=v
         #import password
-        cursor.execute("SELECT password FROM data WHERE number = {}".format(number))
+        cursor.execute("SELECT password FROM data WHERE number = {}".format(self.number))
         passwordT=cursor.fetchall()
         for ch in passwordT:
             for v in ch:
                 password=v
         #import pin
-        cursor.execute("SELECT pin FROM data WHERE number = {}".format(number))
+        cursor.execute("SELECT pin FROM data WHERE number = {}".format(self.number))
         pinT=cursor.fetchall()
         for ch in pinT:
             for v in ch:
                 pin=v
         #import balance
-        cursor.execute("SELECT balance FROM data WHERE number = {}".format(number))
+        cursor.execute("SELECT balance FROM data WHERE number = {}".format(self.number))
         balanceT=cursor.fetchall()
         for ch in balanceT:
             for v in ch:
                 balance=v
         #import name
-        cursor.execute("SELECT name FROM data WHERE number = {}".format(number))
+        cursor.execute("SELECT name FROM data WHERE number = {}".format(self.number))
         nameT=cursor.fetchall()
         for ch in nameT:
             for v in ch:
                 name=v
         #import surname
-        cursor.execute("SELECT surname FROM data WHERE number = {}".format(number))
+        cursor.execute("SELECT surname FROM data WHERE number = {}".format(self.number))
         surnameT=cursor.fetchall()
         for ch in surnameT:
             for v in ch:
                 surname=v
         #import dateOfBirth
-        cursor.execute("SELECT dateOfBirth FROM data WHERE number = {}".format(number))
+        cursor.execute("SELECT dateOfBirth FROM data WHERE number = {}".format(self.number))
         dateOfBirthT=cursor.fetchall()
         for ch in dateOfBirthT:
             for v in ch:
                 dateOfBirth=v
         #import accountNumber
-        cursor.execute("SELECT accountNumber FROM data WHERE number = {}".format(number))
+        cursor.execute("SELECT accountNumber FROM data WHERE number = {}".format(self.number))
         accountNumberT=cursor.fetchall()
         for ch in accountNumberT:
             for v in ch:
@@ -196,7 +198,7 @@ class Info(MainFrame):
         self.surnameL = Label(self.fMainI, text="Naziwsko - {}".format(surname))
         self.dateOfBirthL = Label(self.fMainI, text="Data urodzenia - {}".format(dateOfBirth))
         self.accountNumberL = Label(self.fMainI, text="Numer konta - {}".format(accountNumber))
-        self.backB = Button(self.fMainI, text="Powrót", command= lambda:self.returnF(master, number))
+        self.backB = Button(self.fMainI, text="Powrót", command= lambda:self.returnF())
         self.loginL.grid()
         self.passwordL.grid()
         self.pinL.grid()
@@ -208,7 +210,7 @@ class Info(MainFrame):
         self.backB.grid()
 
     
-    def returnF(self, master, number):
+    def returnF(self):
         self.fMainI.destroy()
         self.loginL.destroy()
         self.passwordL.destroy()
@@ -219,10 +221,12 @@ class Info(MainFrame):
         self.dateOfBirthL.destroy()
         self.accountNumberL.destroy()
         self.backB.destroy()
-        MainFrame.__init__(self, master, number)    
+        MainFrame.__init__(self, self.master, self.number)    
 
 class History (MainFrame):
     def __init__ (self, master, number):
+        self.master = master
+        self.number = number
         #Create frame
         self.fMainH = Frame(master)
         self.fMainH.pack()
@@ -238,47 +242,47 @@ class History (MainFrame):
         except:
             self.connectionErrorL = Label(self.fMainH, text="Nie udało się połączyć z bazą danych")
             self.connectionErrorL.grid()
-            master.after(4000, master.destroy)
+            self.master.after(4000, self.master.destroy)
         cursor = myBaseH.cursor()
             
         try:
             #Import date
-            cursor.execute("SELECT date FROM `{}`".format(number))
+            cursor.execute("SELECT date FROM `{}`".format(self.number))
             dateB = cursor.fetchall()
             for ch in dateB:
                 for v in ch:
                     theDate.append(v)
                 
             #Import accountNumber
-            cursor.execute("SELECT accountNumber FROM `{}`".format(number))
+            cursor.execute("SELECT accountNumber FROM `{}`".format(self.number))
             accountNumberB = cursor.fetchall()
             for ch in accountNumberB:
                 for v in ch:
                     accountNumber.append(v)
             #Import amount
-            cursor.execute("SELECT amount FROM `{}`".format(number))
+            cursor.execute("SELECT amount FROM `{}`".format(self.number))
             amountB = cursor.fetchall()
             for ch in amountB:
                 for v in ch:
                     amount.append(v)
             #Import comment
-            cursor.execute("SELECT comment FROM `{}`".format(number))
+            cursor.execute("SELECT comment FROM `{}`".format(self.number))
             commentB = cursor.fetchall()
             for ch in commentB:
                 for v in ch:
                     comment.append(v)
             #Import counter
-            cursor.execute("SELECT COUNT(*) FROM `{}`".format(number))
+            cursor.execute("SELECT COUNT(*) FROM `{}`".format(self.number))
             counterB=cursor.fetchall()
             for ch in counterB:
                 for v in ch:
                     counter=v
         except:
-            self.returnError(master, number)
+            self.returnError()
         
         if counter == 0:
             self.errorL = Label(self.fMainH, text="Historia jest pusta")
-            self.returnB2 = Button(self.fMainH, text="Powrót", command=lambda: self.returnError2(master, number))
+            self.returnB2 = Button(self.fMainH, text="Powrót", command=lambda: self.returnError2())
             self.errorL.grid()
             self.returnB2.grid()
         else:
@@ -295,47 +299,49 @@ class History (MainFrame):
                 self.historyList.insert(END, "Komentarz: {}".format(comment[i]))
             self.historyList.pack( side = LEFT, fill = BOTH )
             self.scrollbar.config( command = self.historyList.yview )
-            self.returnB = Button(self.fMainH, text="Powrót", command=lambda: self.returnF(master, number))
+            self.returnB = Button(self.fMainH, text="Powrót", command=lambda: self.returnF())
             self.returnB.pack(side=BOTTOM)
 
-    def returnF(self, master, number):
+    def returnF(self):
 
         self.fMainH.destroy()
         self.scrollbar.destroy()
         self.historyList.destroy()
         self.returnB.destroy()
-        MainFrame.__init__(self, master, number)
+        MainFrame.__init__(self, self.master, self.number)
     
-    def returnError(self, master, number):
+    def returnError(self):
         self.fMainH.destroy()
-        MainFrame.__init__(self, master, number)
+        MainFrame.__init__(self, self.master, self.number)
     
-    def returnError2(self, master, number):
+    def returnError2(self):
         self.fMainH.destroy()
         self.returnB2.destroy()
         self.errorL.destroy()
-        MainFrame.__init__(self, master, number)
+        MainFrame.__init__(self, self.master, self.number)
  
 class Transfer (MainFrame):
     def __init__(self, master, number):
+        self.master = master
+        self.number = number
         try: 
             self.errorLabel.destroy()
         except:
             #Create frame
             self.fMainT = Frame(master)
             self.fMainT.pack()
-            self.date = date=time.strftime("%d-%m-%Y %H:%M:%S", time.localtime())
+            self.date = time.strftime("%d-%m-%Y %H:%M:%S", time.localtime())
             #Connect with data base
             try:
                 self.myBaseT = p.connect(host="localhost", user="root", db="bank")
             except:
                 self.connectionErrorL = Label(self.fMainB, text="Nie udało się połączyć z bazą danych")
                 self.connectionErrorL.grid()
-                master.after(4000, master.destroy)
+                self.master.after(4000, self.master.destroy)
             self.cursor = self.myBaseT.cursor()
 
             #checking balance
-            self.cursor.execute("SELECT balance FROM data WHERE number={}".format(number))
+            self.cursor.execute("SELECT balance FROM data WHERE number={}".format(self.number))
             accountBalanceB = self.cursor.fetchall()
             for ch in accountBalanceB:
                 for v in ch:
@@ -348,8 +354,8 @@ class Transfer (MainFrame):
             self.howMuchE = Entry(self.fMainT)
             self.comL = Label(self.fMainT, text="Komentarz do przelewu")
             self.comE = Entry(self.fMainT)
-            self.confirmB = Button(self.fMainT, text="Wyślij", command = lambda: self.confirmF(master, number))
-            self.returnB = Button(self.fMainT, text="Powrót", command = lambda: self.returnF(master, number))
+            self.confirmB = Button(self.fMainT, text="Wyślij", command = lambda: self.confirmF())
+            self.returnB = Button(self.fMainT, text="Powrót", command = lambda: self.returnF())
             self.accountBalanceLT.grid(row=0, columnspan=2)
             self.nrOfTL.grid(row=1, column=0)
             self.nrOfTE.grid(row=1, column=1)
@@ -360,7 +366,7 @@ class Transfer (MainFrame):
             self.confirmB.grid(row=4, columnspan=2)
             self.returnB.grid(row=5, columnspan=2)
 
-    def confirmF(self, master, number):
+    def confirmF(self):
         if int(self.howMuchE.get()) > self.accountBalance:
             self.errorLabel= Label(self.fMainT, text="Podana kwota jest większa od stanu konta")
             self.errorLabel.grid(row=6, columnspan=2)
@@ -370,15 +376,15 @@ class Transfer (MainFrame):
             self.transferL.grid(row=6, columnspan=2)
             #change balance
             self.accountBalance -= int(self.howMuchE.get())
-            self.cursor.execute("UPDATE data SET balance = {} WHERE number={}".format(self.accountBalance, number))
+            self.cursor.execute("UPDATE data SET balance = {} WHERE number={}".format(self.accountBalance, self.number))
             self.myBaseT.commit()
             #saving history
-            self.cursor.execute("INSERT INTO `{}`(date, accountNumber, amount, comment) VALUES ('{}' , '{}' , {} , '{}')".format(number, self.date, self.nrOfTE.get(), int(self.howMuchE.get()), self.comE.get()))
+            self.cursor.execute("INSERT INTO `{}`(date, accountNumber, amount, comment) VALUES ('{}' , '{}' , {} , '{}')".format(self.number, self.date, self.nrOfTE.get(), int(self.howMuchE.get()), self.comE.get()))
             self.myBaseT.commit()
             self.cursor.close()
             self.myBaseT.close()
-            master.after(2000, self.returnF(master, number))
-    def returnF(self, master, number):
+            self.master.after(2000, self.returnF())
+    def returnF(self):
         self.fMainT.destroy()
         self.accountBalanceLT.destroy()
         self.nrOfTL.destroy()
@@ -393,8 +399,9 @@ class Transfer (MainFrame):
         except:
             pass
         self.returnB.destroy()
-        MainFrame.__init__(self, master, number)
+        MainFrame.__init__(self, self.master, self.number)
 
-root = Tk()  
-framePin = StartFrame(root)
-root.mainloop()
+if __name__ == "__main__":
+    root = Tk()  
+    framePin = StartFrame(root)
+    root.mainloop()
