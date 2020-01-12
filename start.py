@@ -1,6 +1,6 @@
 import time, os, sys
 import pymysql as p
-from tkinter import *
+from tkinter import Label
 
 def authentication(master, loginE, passwordE, l1):
     #Create empty tuple
