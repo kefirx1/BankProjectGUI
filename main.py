@@ -13,21 +13,25 @@ class StartFrame():
         self.master.maxsize(500, 300)
         self.fMain = Frame(self.master, bg="#83AD87")
         self.fMain.place(width=500, height=300)
+        self.fUp = Frame(self.fMain, bg="#D2D2D2")
+        self.fUp.place(x=0, y=0, width=500, height=37)
+        self.fContainer = Frame(self.fMain, bg="#D2D2D2")
+        self.fContainer.place(x=152, y=69, width=348, height=231)
         #Login GUI
-        self.logo = Label(self.fMain, text="Narodowy Bank", font=("K2D", 18, "bold"), bg="#83AD87")
-        self.loginL = Label(self.fMain, text="Login", font=("K2D", 28, "bold"), bg="#83AD87")
-        self.passwordL = Label(self.fMain, text="Hasło", font=("K2D", 28, "bold"), bg="#83AD87")
+        self.logo = Label(self.fUp, text="Narodowy Bank", font=("K2D", 18, "bold"), bg="#D2D2D2")
+        self.loginL = Label(self.fMain, text="Login", font=("K2D", 28, "bold"), bg="#D2D2D2")
+        self.passwordL = Label(self.fMain, text="Hasło", font=("K2D", 28, "bold"), bg="#D2D2D2")
         self.loginE = Entry(self.fMain, font=("K2D", 10, "bold"))
         self.passwordE = Entry(self.fMain, show="*", font=("K2D", 10, "bold"))
-        self.l1 = Label(self.fMain, text="Wprowadz poprawny login i hasło", font=("K2D", 9, "bold"), bg="#83AD87")
+        self.l1 = Label(self.fMain, text="Wprowadz poprawny login i hasło", font=("K2D", 9, "bold"), bg="#D2D2D2")
         self.confirmB = Button(self.fMain, text="Zaloguj", font=("K2D", 18, "bold"),bg="#E5E5E5", command=lambda:self.checkLogin())
         self.exitB = Button(self.fMain, text="Wyjdź", font=("K2D", 18, "bold"),bg="#E5E5E5", command= lambda: self.master.destroy())
-        self.logo.place(x=5, y=8, height=36)
+        self.logo.place(x=1, y=0, height=36)
         self.loginL.place(x=160, y=80, width=100, height=41)
         self.passwordL.place(x=172, y=133, width=100, height=35)
         self.loginE.place(x=285, y=80, width=130, height=41)
         self.passwordE.place(x=307, y=130, width=130, height=41)
-        self.l1.place(x=207, y=187, width=201, height=23)
+        self.l1.place(x=207, y=187, width=220, height=23)
         self.confirmB.place(x=260, y=228, width=121, height=38)
         self.exitB.place(x=12, y=254, width=91, height=38)
 
@@ -54,9 +58,14 @@ class MainFrame(StartFrame):
         self.master.title("BANK")
         self.master.minsize(1000, 600)
         self.master.maxsize(1000, 600)
-        self.fMainB = Frame(self.master)
-        self.fMainB.pack()
-
+        self.fMainB = Frame(self.master, bg="#E5E5E5")
+        self.fMainB.place(width=1000, height=600)
+        self.fNav = Frame(self.fMainB, bg="#83AD87")
+        self.fNav.place(x=0, y=0, width=160, height=600)
+        self.fUp = Frame(self.fMainB, bg="#E0E0E0")
+        self.fUp.place(x=160, y=0, width=840, height=90)
+        self.fContainerBallance = Frame(self.fMainB, bg="#C4C4C4")
+        self.fContainerBallance.place(x=230, y=114, width=700, height=200)
         #Connect with data base
         try:
             myBase = p.connect(host="localhost", user="root", db="bank")
@@ -74,22 +83,25 @@ class MainFrame(StartFrame):
                 self.accountBalance=v
 
         #Menu GUI
-        self.l1 = Label(self.fMainB, text="BANK BŁAŻEJA POLSKI")
-        self.l1.grid()
-        self.accountBalanceL = Label(self.fMainB, text="Stan konta {}".format(self.accountBalance))
-        self.transferB = Button(self.fMainB, text="Przelew", command=lambda choice = "Transfer(self.master, self.number)" : self.choiceMenu(choice))
-        self.contactB = Button(self.fMainB, text="Kontakty", command=lambda choice = "Contact(self.master, self.number)" : self.choiceMenu(choice))
-        self.historyB = Button(self.fMainB, text="Historia przelewów", command=lambda choice = "History(self.master, self.number)" : self.choiceMenu(choice))
-        self.infoB = Button(self.fMainB, text="Informacje o koncie", command=lambda choice = "Info(self.master, self.number)" : self.choiceMenu(choice))
-        self.logoutB = Button(self.fMainB, text="Wyloguj", command= lambda: self.logout() )
-        self.exitB = Button(self.fMainB, text="Wyjście", command= lambda: self.exitF())
-        self.accountBalanceL.grid()
-        self.transferB.grid()
-        self.contactB.grid()
-        self.historyB.grid()
-        self.infoB.grid() 
-        self.logoutB.grid()
-        self.exitB.grid()
+        
+        self.l1 = Label(self.fMainB, text="NARODOWY BANK", font=("K2D", 48, "bold") )
+        self.accountBalanceL = Label(self.fMainB, text="DOSTĘPNE ŚRODKI: {} zł".format(self.accountBalance), font=("K2D", 30, "bold"))
+        self.transferB = Button(self.fMainB, text="PRZELEW",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "Transfer(self.master, self.number)" : self.choiceMenu(choice))
+        self.contactB = Button(self.fMainB, text="KONTAKTY",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "Contact(self.master, self.number)" : self.choiceMenu(choice))
+        self.historyB = Button(self.fMainB, text="HISTORIA",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "History(self.master, self.number)" : self.choiceMenu(choice))
+        self.infoB = Button(self.fMainB, text="KONTO",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "Info(self.master, self.number)" : self.choiceMenu(choice))
+        self.settingsB = Button(self.fMainB, text="USTAWIENIA", bg="#FFF8F8", font=("K2D", 6, "bold"), command= lambda: self.settings() )
+        self.logoutB = Button(self.fMainB, text="WOLOGUJ",bg="#FFF8F8", font=("K2D", 8, "bold"), command= lambda: self.logout() )
+        self.exitB = Button(self.fMainB, text="WYJDŹ",bg="#FFF8F8", font=("K2D", 8, "bold"), command= lambda: self.exitF())
+        self.l1.place(x=160, y=0, width=840, height=90)
+        self.accountBalanceL.place(x=230, y=114, width=700, height=200)
+        self.transferB.place(x=30, y=22, width=100, height=80)
+        self.contactB.place(x=30, y=124, width=100, height=80)
+        self.historyB.place(x=30, y=226, width=100, height=80)
+        self.infoB.place(x=30, y=328, width=100, height=80) 
+        self.settingsB.place(x=50, y=476, width=60, height=40)
+        self.logoutB.place(x=10, y=529, width=60, height=40)
+        self.exitB.place(x=90, y=529, width=60, height=40)
         self.fMainB.mainloop()
 
     def choiceMenu(self, choice):
@@ -102,9 +114,17 @@ class MainFrame(StartFrame):
         self.infoB.destroy()
         self.logoutB.destroy()
         self.exitB.destroy()
+        self.settingsB.destroy()
         self.contactB.destroy()
         objectM = eval(choice)
     
+    def settings(self):
+        self.fSettings = Toplevel(self.master)
+        self.fSettings.minsize(200, 300)
+        self.fSettings.maxsize(200, 300)
+        self.fSettings.title("BANK - USTAWIENIA")
+
+
     def logout(self):
         #Destroy Menu GUI
         self.fMainB.destroy()
@@ -127,8 +147,9 @@ class MainFrame(StartFrame):
         self.logoutB.destroy()
         self.exitB.destroy()
         self.contactB.destroy()
-        self.goodbayL = Label(self.fMainB, text="Żegnamy")
-        self.goodbayL.grid()
+        self.settingsB.destroy()
+        self.goodbayL = Label(self.fMainB, text="ŻEGNAMY", font=("K2D", 30, "bold"))
+        self.goodbayL.place(x=230, y=114, width=700, height=200)
         self.master.after(2000, self.master.destroy)
 
 class Contact(MainFrame):
