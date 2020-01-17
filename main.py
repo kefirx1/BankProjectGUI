@@ -1,5 +1,6 @@
 from tkinter import *
-import time, sys, start
+import time, sys
+import data.start
 import pymysql as p
 
 
@@ -15,29 +16,27 @@ class StartFrame():
         self.fMain.place(width=500, height=300)
         self.fUp = Frame(self.fMain, bg="#D2D2D2")
         self.fUp.place(x=0, y=0, width=500, height=37)
-        self.fContainer = Frame(self.fMain, bg="#D2D2D2")
-        self.fContainer.place(x=152, y=69, width=348, height=231)
         #Login GUI
-        self.logo = Label(self.fUp, text="Narodowy Bank", font=("K2D", 18, "bold"), bg="#D2D2D2")
-        self.loginL = Label(self.fMain, text="Login", font=("K2D", 28, "bold"), bg="#D2D2D2")
-        self.passwordL = Label(self.fMain, text="Hasło", font=("K2D", 28, "bold"), bg="#D2D2D2")
+        self.logo = Label(self.fMain, text="Narodowy Bank", font=("K2D", 18, "bold"), bg="#D2D2D2")
+        self.loginL = Label(self.fMain, text="Login", font=("K2D", 28, "bold"), bg="#83AD87")
+        self.passwordL = Label(self.fMain, text="Hasło", font=("K2D", 28, "bold"), bg="#83AD87")
         self.loginE = Entry(self.fMain, font=("K2D", 10, "bold"))
         self.passwordE = Entry(self.fMain, show="*", font=("K2D", 10, "bold"))
-        self.l1 = Label(self.fMain, text="Wprowadz poprawny login i hasło", font=("K2D", 9, "bold"), bg="#D2D2D2")
-        self.confirmB = Button(self.fMain, text="Zaloguj", font=("K2D", 18, "bold"),bg="#E5E5E5", command=lambda:self.checkLogin())
-        self.exitB = Button(self.fMain, text="Wyjdź", font=("K2D", 18, "bold"),bg="#E5E5E5", command= lambda: self.master.destroy())
-        self.logo.place(x=1, y=0, height=36)
-        self.loginL.place(x=160, y=80, width=100, height=41)
-        self.passwordL.place(x=172, y=133, width=100, height=35)
-        self.loginE.place(x=285, y=80, width=130, height=41)
-        self.passwordE.place(x=307, y=130, width=130, height=41)
-        self.l1.place(x=207, y=187, width=220, height=23)
-        self.confirmB.place(x=260, y=228, width=121, height=38)
-        self.exitB.place(x=12, y=254, width=91, height=38)
+        self.l1 = Label(self.fMain, text="Wprowadz poprawny login i hasło", font=("K2D", 9, "bold"), bg="#83AD87")
+        self.confirmB = Button(self.fMain, text="Zaloguj", font=("K2D", 18, "bold"),bg="#FFF8F8", command=lambda:self.checkLogin())
+        self.exitB = Button(self.fMain, text="Wyjdź", font=("K2D", 18, "bold"),bg="#FFF8F8", command= lambda: self.master.destroy())
+        self.logo.place(x=164, y=0, width=180 ,height=36)
+        self.loginL.place(x=100, y=80, width=100, height=40)
+        self.passwordL.place(x=100, y=136, width=100, height=40)
+        self.loginE.place(x=223, y=80, width=130, height=40)
+        self.passwordE.place(x=223, y=136, width=130, height=40)
+        self.l1.place(x=123, y=192, width=201, height=23)
+        self.confirmB.place(x=287, y=228, width=121, height=40)
+        self.exitB.place(x=63, y=228, width=121, height=40)
 
 
     def checkLogin(self):
-        self.number = start.authentication(self.master,self.loginE, self.passwordE, self.l1)
+        self.number = data.start.authentication(self.master,self.loginE, self.passwordE, self.l1)
         for ch in self.number:
             for v in ch:
                 self.number=v
@@ -58,7 +57,7 @@ class MainFrame(StartFrame):
         self.master.title("BANK")
         self.master.minsize(1000, 600)
         self.master.maxsize(1000, 600)
-        self.fMainB = Frame(self.master, bg="#E5E5E5")
+        self.fMainB = Frame(self.master, bg="#D2D2D2")
         self.fMainB.place(width=1000, height=600)
         self.fNav = Frame(self.fMainB, bg="#83AD87")
         self.fNav.place(x=0, y=0, width=160, height=600)
@@ -70,8 +69,8 @@ class MainFrame(StartFrame):
         try:
             myBase = p.connect(host="localhost", user="root", db="bank")
         except:
-            self.connectionErrorL = Label(self.fMainB, text="Nie udało się połączyć z bazą danych")
-            self.connectionErrorL.grid()
+            self.connectionErrorL = Label(self.fMainB, text="NIE UDAŁO SIĘ POLĄCZYĆ Z BAZĄ DANYCH", font=("K2D", 24, "bold"), bg="#C4C4C4")
+            self.connectionErrorL.place(x=230, y=114, width=700, height=200)
             self.master.after(4000, self.master.destroy)
         cursor = myBase.cursor()
 
@@ -84,8 +83,8 @@ class MainFrame(StartFrame):
 
         #Menu GUI
         
-        self.l1 = Label(self.fMainB, text="NARODOWY BANK", font=("K2D", 48, "bold") )
-        self.accountBalanceL = Label(self.fMainB, text="DOSTĘPNE ŚRODKI: {} zł".format(self.accountBalance), font=("K2D", 30, "bold"))
+        self.logo = Label(self.fMainB, text="NARODOWY BANK", font=("K2D", 48, "bold"), bg="#E0E0E0" )
+        self.accountBalanceL = Label(self.fMainB, text="DOSTĘPNE ŚRODKI: {} zł".format(self.accountBalance), font=("K2D", 30, "bold"), bg="#C4C4C4")
         self.transferB = Button(self.fMainB, text="PRZELEW",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "Transfer(self.master, self.number)" : self.choiceMenu(choice))
         self.contactB = Button(self.fMainB, text="KONTAKTY",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "Contact(self.master, self.number)" : self.choiceMenu(choice))
         self.historyB = Button(self.fMainB, text="HISTORIA",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "History(self.master, self.number)" : self.choiceMenu(choice))
@@ -93,7 +92,7 @@ class MainFrame(StartFrame):
         self.settingsB = Button(self.fMainB, text="USTAWIENIA", bg="#FFF8F8", font=("K2D", 6, "bold"), command= lambda: self.settings() )
         self.logoutB = Button(self.fMainB, text="WOLOGUJ",bg="#FFF8F8", font=("K2D", 8, "bold"), command= lambda: self.logout() )
         self.exitB = Button(self.fMainB, text="WYJDŹ",bg="#FFF8F8", font=("K2D", 8, "bold"), command= lambda: self.exitF())
-        self.l1.place(x=160, y=0, width=840, height=90)
+        self.logo.place(x=160, y=0, width=840, height=90)
         self.accountBalanceL.place(x=230, y=114, width=700, height=200)
         self.transferB.place(x=30, y=22, width=100, height=80)
         self.contactB.place(x=30, y=124, width=100, height=80)
@@ -107,7 +106,7 @@ class MainFrame(StartFrame):
     def choiceMenu(self, choice):
         #Destroy Menu GUI
         self.fMainB.destroy()
-        self.l1.destroy()
+        self.logo.destroy()
         self.accountBalanceL.destroy()
         self.transferB.destroy()
         self.historyB.destroy()
@@ -119,16 +118,25 @@ class MainFrame(StartFrame):
         objectM = eval(choice)
     
     def settings(self):
-        self.fSettings = Toplevel(self.master)
-        self.fSettings.minsize(200, 300)
-        self.fSettings.maxsize(200, 300)
+        #Create frame
+        self.fSettings = Toplevel(self.master, bg="#D2D2D2")
+        self.fSettings.minsize(280, 400)
+        self.fSettings.maxsize(280, 400)
         self.fSettings.title("BANK - USTAWIENIA")
+        self.footer = Frame(self.fSettings, bg="#83AD87")
+        self.footer.place(x=0, y=340, width=280, height=60)
+        self.soon = Label(self.fSettings, text="SOON")
+        self.soon.place(x=46, y=60)
+        #Options
+        self.returnB = Button(self.fSettings, text="POWRÓT", bg="#FFF8F8", font=("K2D", 12, "bold") ,command=lambda: self.fSettings.destroy())
+        self.returnB.place(x=90, y=350, width=100, height=40)
+
 
 
     def logout(self):
         #Destroy Menu GUI
         self.fMainB.destroy()
-        self.l1.destroy()
+        self.logo.destroy()
         self.accountBalanceL.destroy()
         self.transferB.destroy()
         self.historyB.destroy()
@@ -139,7 +147,7 @@ class MainFrame(StartFrame):
         StartFrame.__init__(self, self.master) 
     
     def exitF(self):
-        self.l1.destroy()
+        self.logo.destroy()
         self.accountBalanceL.destroy()
         self.transferB.destroy()
         self.historyB.destroy()
@@ -148,7 +156,7 @@ class MainFrame(StartFrame):
         self.exitB.destroy()
         self.contactB.destroy()
         self.settingsB.destroy()
-        self.goodbayL = Label(self.fMainB, text="ŻEGNAMY", font=("K2D", 30, "bold"))
+        self.goodbayL = Label(self.fMainB, text="ŻEGNAMY", font=("K2D", 30, "bold"), bg="#C4C4C4")
         self.goodbayL.place(x=230, y=114, width=700, height=200)
         self.master.after(2000, self.master.destroy)
 
@@ -157,16 +165,23 @@ class Contact(MainFrame):
         self.master = master
         self.number = number
         #Create frame 
-        self.fMainC = Frame(self.master)
-        self.fMainC.pack()
+        self.fMainC = Frame(self.master, bg="#D2D2D2")
+        self.fMainC.place(width=1000, height=600)
+        self.fNav = Frame(self.fMainC, bg="#83AD87")
+        self.fNav.place(x=0, y=0, width=160, height=600)
+        self.fUp = Frame(self.fMainC, bg="#E0E0E0")
+        self.fUp.place(x=160, y=0, width=840, height=90)
+        self.logo = Label(self.fMainC, text="NARODOWY BANK", font=("K2D", 48, "bold"), bg="#E0E0E0" )
+        self.logo.place(x=160, y=0, width=840, height=90)
+
         #Variables
         self.contact = []
         #Connect with data base
         try:
             myBase = p.connect(host="localhost", user="root", db="bank")
         except:
-            self.connectionErrorL = Label(self.fMainC, text="Nie udało się połączyć z bazą danych")
-            self.connectionErrorL.grid()
+            self.connectionErrorL = Label(self.fMainC, text="NIE UDAŁO SIĘ POLĄCZYĆ Z BAZĄ DANYCH", font=("K2D", 24, "bold"), bg="#C4C4C4" )
+            self.connectionErrorL.place(x=305, y=291, width=550, height=100)
             self.master.after(4000, self.master.destroy)
         self.cursor = myBase.cursor()
         
@@ -192,23 +207,23 @@ class Contact(MainFrame):
 
         #Create scrollbars
         self.scrollbarContact = Scrollbar(self.fMainC)
-        self.scrollbarContact.grid(row=0, column=1, sticky=N+S)
-        self.contactList = Listbox(self.fMainC, yscrollcommand = self.scrollbarContact.set )
+        self.scrollbarContact.place(x=840, y=116, width=30, height=450)
+        self.contactList = Listbox(self.fMainC, bg="#C4C4C4", highlightcolor="#C4C4C4", font=("K2D", 30, "bold")  , yscrollcommand = self.scrollbarContact.set )
         
         if self.contactTrue == ['']:
             self.contactList.destroy()
             self.scrollbarContact.destroy()
-            self.emptyContact = Label(self.fMainC, text="Brak kontaktów")
-            self.emptyContact.grid()
+            self.emptyContact = Label(self.fMainC, text="Brak kontaktów", font=("K2D", 40, "bold"), bg="#C4C4C4" )
+            self.emptyContact.place(x=305, y=291, width=550, height=100)
         else:
             #Print contact
             for i in range(len(self.contactTrue)):
-                self.contactList.insert(END, "Kontakt nr {}: {}".format(i+1, self.contactTrue[i]))
-            self.contactList.grid(row=0, column=0)
+                self.contactList.insert(END, "{}".format(self.contactTrue[i]))
+            self.contactList.place(x=320, y=116, width=520, height=450)
             self.scrollbarContact.config( command = self.contactList.yview )
 
-        self.returnB = Button(self.fMainC, text="Powrót", command=lambda: self.returnF())
-        self.returnB.grid(row=1)
+        self.returnB = Button(self.fMainC, text="POWRÓT", bg="#FFF8F8", font=("K2D", 18, "bold") ,command=lambda: self.returnF())
+        self.returnB.place(x=20, y=519, width=120, height=62)
             
 
     def returnF(self):
@@ -234,14 +249,22 @@ class Info(MainFrame):
         self.master = master
         self.number = number
         #Create frame
-        self.fMainI = Frame(master)
-        self.fMainI.pack()
+        self.fMainI = Frame(self.master, bg="#D2D2D2")
+        self.fMainI.place(width=1000, height=600)
+        self.fNav = Frame(self.fMainI, bg="#83AD87")
+        self.fNav.place(x=0, y=0, width=160, height=600)
+        self.fUp = Frame(self.fMainI, bg="#E0E0E0")
+        self.fUp.place(x=160, y=0, width=840, height=90)
+        self.logo = Label(self.fMainI, text="NARODOWY BANK", font=("K2D", 48, "bold"), bg="#E0E0E0" )
+        self.logo.place(x=160, y=0, width=840, height=90)
+        self.container = Frame(self.fMainI, bg="#C4C4C4")
+        self.container.place(x=320, y=116, width=520, height=450)
         #Connect with data base
         try:
             myBase = p.connect(host="localhost", user="root", db="bank")
         except:
-            self.connectionErrorL = Label(self.fMainI, text="Nie udało się połączyć z bazą danych")
-            self.connectionErrorL.grid()
+            self.connectionErrorL = Label(self.fMainC, text="Nie udało się połączyć z bazą danych", font=("K2D", 24, "bold"), bg="#C4C4C4" )
+            self.connectionErrorL.place(x=305, y=291, width=550, height=100)
             self.master.after(4000, self.master.destroy)
         cursor = myBase.cursor()
 
@@ -295,26 +318,26 @@ class Info(MainFrame):
                 self.accountNumber=v
 
         #Info GUI
-        self.loginL = Label(self.fMainI, text="Login - {}".format(self.login))
-        self.passwordL = Label(self.fMainI, text="Hasło - Pokaż hasło")
+        self.loginL = Label(self.fMainI, text="LOGIN - {}".format(self.login), font=("K2D", 16, "bold"), bg="#C4C4C4")
+        self.passwordL = Label(self.fMainI, text="HASŁO - POKAŻ HASŁO", font=("K2D", 16, "bold"), bg="#C4C4C4")
         self.passwordL.bind("<Button-1>", self.showPassword)
-        self.pinL = Label(self.fMainI, text="PIN - Pokaż PIN")
+        self.pinL = Label(self.fMainI, text="PIN - POKAŻ PIN", font=("K2D", 16, "bold"), bg="#C4C4C4")
         self.pinL.bind("<Button-1>", self.showPIN)
-        self.balanceL = Label(self.fMainI, text="Stan konta - {}".format(self.balance))
-        self.nameL = Label(self.fMainI, text="Imie - {}".format(self.name))
-        self.surnameL = Label(self.fMainI, text="Naziwsko - {}".format(self.surname))
-        self.dateOfBirthL = Label(self.fMainI, text="Data urodzenia - {}".format(self.dateOfBirth))
-        self.accountNumberL = Label(self.fMainI, text="Numer konta - {}".format(self.accountNumber))
-        self.backB = Button(self.fMainI, text="Powrót", command= lambda:self.returnF())
-        self.loginL.grid()
-        self.passwordL.grid()
-        self.pinL.grid()
-        self.balanceL.grid()
-        self.nameL.grid()
-        self.surnameL.grid()
-        self.dateOfBirthL.grid()
-        self.accountNumberL.grid()
-        self.backB.grid()
+        self.balanceL = Label(self.fMainI, text="STAN KONTA - {}".format(self.balance), font=("K2D", 16, "bold"), bg="#C4C4C4")
+        self.nameL = Label(self.fMainI, text="IMIĘ - {}".format(self.name), font=("K2D", 16, "bold"), bg="#C4C4C4")
+        self.surnameL = Label(self.fMainI, text="NAZWISKO - {}".format(self.surname), font=("K2D", 16, "bold"), bg="#C4C4C4")
+        self.dateOfBirthL = Label(self.fMainI, text="DATA URODZENIA - {}".format(self.dateOfBirth), font=("K2D", 16, "bold"), bg="#C4C4C4")
+        self.accountNumberL = Label(self.fMainI, text="NUMER KONTA - {}".format(self.accountNumber), font=("K2D", 14, "bold"), bg="#C4C4C4")
+        self.backB = Button(self.fMainI, text="POWRÓT", command= lambda:self.returnF(), font=("K2D", 16, "bold"), bg="#FFF8F8")
+        self.loginL.place(x=320, y=141, width=520, height=50)
+        self.passwordL.place(x=320, y=191, width=520, height=50)
+        self.pinL.place(x=320, y=241, width=520, height=50)
+        self.balanceL.place(x=320, y=291, width=520, height=50)
+        self.nameL.place(x=320, y=341, width=520, height=50)
+        self.surnameL.place(x=320, y=391, width=520, height=50)
+        self.dateOfBirthL.place(x=320, y=441, width=520, height=50)
+        self.accountNumberL.place(x=320, y=491, width=520, height=50)
+        self.backB.place(x=20, y=519, width=120, height=62)
 
     
     def returnF(self):
@@ -331,7 +354,7 @@ class Info(MainFrame):
         MainFrame.__init__(self, self.master, self.number)    
 
     def showPassword(self, event):
-        self.passwordL.config(text="Hasło - {} ".format(self.password))
+        self.passwordL.config(text="HASŁO - {} ".format(self.password))
     def showPIN(self, event):
         self.pinL.config(text="PIN - {} ".format(self.pin))
 
@@ -340,8 +363,14 @@ class History (MainFrame):
         self.master = master
         self.number = number
         #Create frame
-        self.fMainH = Frame(master)
-        self.fMainH.pack()
+        self.fMainH = Frame(self.master, bg="#D2D2D2")
+        self.fMainH.place(width=1000, height=600)
+        self.fNav = Frame(self.fMainH, bg="#83AD87")
+        self.fNav.place(x=0, y=0, width=160, height=600)
+        self.fUp = Frame(self.fMainH, bg="#E0E0E0")
+        self.fUp.place(x=160, y=0, width=840, height=90)
+        self.logo = Label(self.fMainH, text="NARODOWY BANK", font=("K2D", 48, "bold"), bg="#E0E0E0" )
+        self.logo.place(x=160, y=0, width=840, height=90)
         #Variables
         theDateOutgoing = []
         accountNumberOutgoing = []
@@ -356,8 +385,8 @@ class History (MainFrame):
         try:
             myBaseH = p.connect(host="localhost", user="root", db="bank")
         except:
-            self.connectionErrorL = Label(self.fMainH, text="Nie udało się połączyć z bazą danych")
-            self.connectionErrorL.grid()
+            self.connectionErrorL = Label(self.fMainH, text="NIE UDAŁO SIĘ POLĄCZYĆ Z BAZĄ DANYCH", font=("K2D", 12, "bold"),bg="D2D2D2")
+            self.connectionErrorL.place(x=392, y=560, width=375, height=40)
             self.master.after(4000, self.master.destroy)
         cursor = myBaseH.cursor()
 
@@ -433,13 +462,16 @@ class History (MainFrame):
             self.returnError()
         
         #Create scrollbars
+        self.outgoingL = Label(self.fMainH, text="WYCHODZĄCE", font=("K2D", 13, "bold"), bg="#D2D2D2" )
+        self.incomingL = Label(self.fMainH, text="PRZYCHODZĄCE", font=("K2D", 13, "bold"), bg="#D2D2D2" )
         self.scrollbarOutgoing = Scrollbar(self.fMainH)
-        self.scrollbarOutgoing.grid(row=0, column=1, sticky=N+S)
-        self.historyListOutgoing = Listbox(self.fMainH, yscrollcommand = self.scrollbarOutgoing.set )
+        self.scrollbarOutgoing.place(x=501, y=154, width=30, height=400)
+        self.historyListOutgoing = Listbox(self.fMainH, yscrollcommand = self.scrollbarOutgoing.set, font=("K2D", 11, "bold"), bg="#C4C4C4", highlightcolor="#C4C4C4")
         self.scrollbarIncoming = Scrollbar(self.fMainH)
-        self.scrollbarIncoming.grid(row=0, column=3, sticky=N+S)
-        self.historyListIncoming = Listbox(self.fMainH, yscrollcommand = self.scrollbarIncoming .set )
-
+        self.scrollbarIncoming.place(x=929, y=154, width=30, height=400)
+        self.historyListIncoming = Listbox(self.fMainH, yscrollcommand = self.scrollbarIncoming .set, font=("K2D", 11, "bold"), bg="#C4C4C4", highlightcolor="#C4C4C4")
+        self.outgoingL.place(x=201, y=102, width=300, height=52)
+        self.outgoingL.place(x=629, y=102, width=300, height=52)
         #Print history Outgoing
         for i in range(counterOutgoing):
             self.historyListOutgoing.insert(END, "Przelew nr {}".format(i+1))
@@ -447,7 +479,7 @@ class History (MainFrame):
             self.historyListOutgoing.insert(END, "Adres: {}".format(accountNumberOutgoing[i]))
             self.historyListOutgoing.insert(END, "Kwota: {} zł".format(amountOutgoing[i]))
             self.historyListOutgoing.insert(END, "Komentarz: {}".format(commentOutgoing[i]))
-        self.historyListOutgoing.grid(row=0, column=0)
+        self.historyListOutgoing.place(x=201, y=154, width=300, height=400)
         self.scrollbarOutgoing.config( command = self.historyListOutgoing.yview )
         #Print history Incoming
         for i in range(counterIncoming):
@@ -456,11 +488,11 @@ class History (MainFrame):
             self.historyListIncoming.insert(END, "Adres: {}".format(accountNumberIncoming[i]))
             self.historyListIncoming.insert(END, "Kwota: {} zł".format(amountIncoming[i]))
             self.historyListIncoming.insert(END, "Komentarz: {}".format(commentIncoming[i]))
-        self.historyListIncoming.grid(row=0, column=2)
+        self.historyListIncoming.place(x=629, y=154, width=300, height=400)
         self.scrollbarIncoming.config( command = self.historyListIncoming.yview )
 
-        self.returnB = Button(self.fMainH, text="Powrót", command=lambda: self.returnF())
-        self.returnB.grid(row=1, columnspan=4)
+        self.returnB = Button(self.fMainH, text="Powrót", command = lambda: self.returnF(), font=("K2D", 16, "bold"), bg="#FFF8F8")
+        self.returnB.place(x=20, y=519, width=120, height=62)
 
     def returnF(self):
 
@@ -484,15 +516,23 @@ class Transfer (MainFrame):
             self.errorLabel.destroy()
         except:
             #Create frame
-            self.fMainT = Frame(master)
-            self.fMainT.pack()
+            self.fMainT = Frame(master, bg="#D2D2D2")
+            self.fMainT.place(width=1000, height=600)
+            self.fNav = Frame(self.fMainT, bg="#83AD87")
+            self.fNav.place(x=0, y=0, width=160, height=600)
+            self.fUp = Frame(self.fMainT, bg="#E0E0E0")
+            self.fUp.place(x=160, y=0, width=840, height=90)
+            self.logo = Label(self.fMainT, text="NARODOWY BANK", font=("K2D", 48, "bold"), bg="#E0E0E0" )
+            self.logo.place(x=160, y=0, width=840, height=90)
+            self.container = Frame(self.fMainT, bg="#C4C4C4")
+            self.container.place(x=320, y=116, width=520, height=450)
             self.date = time.strftime("%d-%m-%Y %H:%M:%S", time.localtime())
             #Connect with data base
             try:
                 self.myBaseT = p.connect(host="localhost", user="root", db="bank")
             except:
-                self.connectionErrorL = Label(self.fMainT, text="Nie udało się połączyć z bazą danych")
-                self.connectionErrorL.grid()
+                self.connectionErrorL = Label(self.fMainT, text="NIE UDAŁO SIĘ POLĄCZYĆ Z BAZĄ DANYCH", font=("K2D", 24, "bold"), bg="#C4C4C4" )
+                self.connectionErrorL.place(x=305, y=291, width=550, height=100)
                 self.master.after(4000, self.master.destroy)
             self.cursor = self.myBaseT.cursor()
 
@@ -525,29 +565,30 @@ class Transfer (MainFrame):
                 for v in ch:
                     self.accountBalance=v
 
-            self.accountBalanceLT = Label(self.fMainT, text="Stan konta: {} zł".format(self.accountBalance))
-            self.contactL = Label(self.fMainT, text="Kontakt")
-            self.contactE = Entry(self.fMainT)
-            self.nrOfTL = Label(self.fMainT, text="Numer konta odbiorcy ")
-            self.nrOfTE = Entry(self.fMainT)
+            self.accountBalanceLT = Label(self.fMainT, text="STAN KONTA: {} zł".format(self.accountBalance), font=("K2D", 25, "bold"), bg="#C4C4C4")
+            self.contactL = Label(self.fMainT, text="Kontakt", font=("K2D", 16, "bold"), bg="#C4C4C4")
+            self.contactE = Entry(self.fMainT, font=("K2D", 13, "bold"), bg="#FFF8F8")
+            self.nrOfTL = Label(self.fMainT, text="Numer konta odbiorcy ", font=("K2D", 16, "bold"), bg="#C4C4C4")
+            self.nrOfTE = Entry(self.fMainT, font=("K2D", 13, "bold"), bg="#FFF8F8")
             self.nrOfTE.bind("<Button-1>", self.checkContact)
-            self.howMuchL = Label(self.fMainT, text="Kwota przelewu")
-            self.howMuchE = Entry(self.fMainT)
-            self.comL = Label(self.fMainT, text="Komentarz do przelewu")
-            self.comE = Entry(self.fMainT)
-            self.confirmB = Button(self.fMainT, text="Wyślij", command = lambda: self.confirmF())
-            self.returnB = Button(self.fMainT, text="Powrót", command = lambda: self.returnF())
-            self.accountBalanceLT.grid(row=0, columnspan=2)
-            self.contactL.grid(row=1, column=0)
-            self.contactE.grid(row=1, column=1)
-            self.nrOfTL.grid(row=2, column=0)
-            self.nrOfTE.grid(row=2, column=1)
-            self.howMuchL.grid(row=3, column=0)
-            self.howMuchE.grid(row=3, column=1)
-            self.comL.grid(row=4, column=0)
-            self.comE.grid(row=4, column=1)
-            self.confirmB.grid(row=5, columnspan=2)
-            self.returnB.grid(row=6, columnspan=2)
+            self.howMuchL = Label(self.fMainT, text="Kwota przelewu", font=("K2D", 16, "bold"), bg="#C4C4C4")
+            self.howMuchE = Entry(self.fMainT, font=("K2D", 13, "bold"), bg="#FFF8F8")
+            self.comL = Label(self.fMainT, text="Komentarz do przelewu", font=("K2D", 16, "bold"), bg="#C4C4C4")
+            self.comE = Entry(self.fMainT, font=("K2D", 13, "bold"), bg="#FFF8F8")
+            self.confirmB = Button(self.fMainT, text="Wyślij", command = lambda: self.confirmF(), font=("K2D", 16, "bold"), bg="#FFF8F8")
+            self.returnB = Button(self.fMainT, text="Powrót", command = lambda: self.returnF(), font=("K2D", 16, "bold"), bg="#FFF8F8")
+            self.accountBalanceLT.place(x=320, y=116, width=520, height=50)
+            self.contactL.place(x=320, y=192, width=260, height=60)
+            self.contactE.place(x=580, y=202, width=241, height=50)
+            self.nrOfTL.place(x=320, y=252, width=260, height=60)
+            self.nrOfTE.place(x=580, y=262, width=241, height=50)
+            self.howMuchL.place(x=320, y=312, width=260, height=60)
+            self.howMuchE.place(x=580, y=322, width=241, height=50)
+            self.comL.place(x=320, y=372, width=260, height=60)
+            self.comE.place(x=580, y=382, width=241, height=50)
+            self.confirmB.place(x=480, y=474, width=200, height=50)
+            self.returnB.place(x=20, y=519, width=120, height=62)
+
 
     def checkContact(self, event):
         if self.contactE.get() in self.contactTrueT:
@@ -566,12 +607,12 @@ class Transfer (MainFrame):
 
     def confirmF(self):
         if int(self.howMuchE.get()) > self.accountBalance:
-            self.errorLabel= Label(self.fMainT, text="Podana kwota jest większa od stanu konta")
-            self.errorLabel.grid(row=7, columnspan=2)
+            self.errorLabel= Label(self.fMainT, text="Podana kwota jest większa od stanu konta", font=("K2D", 10, "bold"), bg="#C4C4C4")
+            self.errorLabel.place(x=357, y=432, width=446, height=42)
             return
         else:
-            self.transferL = Label(self.fMainT, text="Wysyłanie przelewu pod numer: {}, o kwocie: {} zł, z komentarzem: {}".format(self.nrOfTE.get(),self.howMuchE.get(), self.comE.get()))
-            self.transferL.grid(row=7, columnspan=2)
+            self.transferL = Label(self.fMainT, text="Wysyłanie przelewu pod numer: {}, o kwocie: {} zł, z komentarzem: {}".format(self.nrOfTE.get(),self.howMuchE.get(), self.comE.get()), font=("K2D", 10, "bold"), bg="#C4C4C4")
+            self.transferL.place(x=357, y=432, width=446, height=42)
 
             self.cursor.execute("SELECT accountNumber FROM data WHERE accountNumber= '{}' ".format(self.nrOfTE.get()))
             self.nrOfTDB = self.cursor.fetchall()
@@ -626,5 +667,6 @@ class Transfer (MainFrame):
 
 if __name__ == "__main__":
     root = Tk()  
+    root.iconbitmap("C:/Users/bkwia/Desktop/python/bankGUI/data/bank.ico")
     framePin = StartFrame(root)
     root.mainloop()

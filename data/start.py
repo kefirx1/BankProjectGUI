@@ -9,7 +9,7 @@ def authentication(master, loginE, passwordE, l1):
     try:
         myBase=p.connect(host="localhost", user="root", db="bank")
     except:
-        l1.config(text="Nie udało się połączyć z bazą danych")
+        l1.config(text="NIE UDAŁO SIĘ POLĄCZYĆ Z BAZĄ DANYCH")
         master.after(4000, master.destroy)
     cursor = myBase.cursor()
 
@@ -26,9 +26,9 @@ def authentication(master, loginE, passwordE, l1):
             myBase.close()
             return number
         else:
-            l1.config(text="Złe hasło")
+            l1.config(text="ZŁE HASŁO")
     else:
-        l1.config(text="Zły login")
+        l1.config(text="ZŁY LOGIN")
     #close connecting
     cursor.close()
     myBase.close()
