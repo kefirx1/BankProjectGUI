@@ -1,62 +1,17 @@
 from tkinter import *
 import time, sys
-import data.start
 import pymysql as p
 
-
-
-class StartFrame():
-    def __init__(self, master):
+class MainFrame():
+    def __init__(self ,master ,number):
         #Create frame
+        self.cos = self
         self.master = master
-        self.master.title("BANK - pin")
-        self.master.minsize(500, 300)
-        self.master.maxsize(500, 300)
-        self.fMain = Frame(self.master, bg="#83AD87")
-        self.fMain.place(width=500, height=300)
-        self.fUp = Frame(self.fMain, bg="#D2D2D2")
-        self.fUp.place(x=0, y=0, width=500, height=37)
-        #Login GUI
-        self.logo = Label(self.fMain, text="Narodowy Bank", font=("K2D", 18, "bold"), bg="#D2D2D2")
-        self.loginL = Label(self.fMain, text="Login", font=("K2D", 28, "bold"), bg="#83AD87")
-        self.passwordL = Label(self.fMain, text="Hasło", font=("K2D", 28, "bold"), bg="#83AD87")
-        self.loginE = Entry(self.fMain, font=("K2D", 10, "bold"))
-        self.passwordE = Entry(self.fMain, show="*", font=("K2D", 10, "bold"))
-        self.l1 = Label(self.fMain, text="Wprowadz poprawny login i hasło", font=("K2D", 9, "bold"), bg="#83AD87")
-        self.confirmB = Button(self.fMain, text="Zaloguj", font=("K2D", 18, "bold"),bg="#FFF8F8", command=lambda:self.checkLogin())
-        self.exitB = Button(self.fMain, text="Wyjdź", font=("K2D", 18, "bold"),bg="#FFF8F8", command= lambda: self.master.destroy())
-        self.logo.place(x=164, y=0, width=180 ,height=36)
-        self.loginL.place(x=100, y=80, width=100, height=40)
-        self.passwordL.place(x=100, y=136, width=100, height=40)
-        self.loginE.place(x=223, y=80, width=130, height=40)
-        self.passwordE.place(x=223, y=136, width=130, height=40)
-        self.l1.place(x=123, y=192, width=201, height=23)
-        self.confirmB.place(x=287, y=228, width=121, height=40)
-        self.exitB.place(x=63, y=228, width=121, height=40)
-
-
-    def checkLogin(self):
-        self.number = data.start.authentication(self.master,self.loginE, self.passwordE, self.l1)
-        for ch in self.number:
-            for v in ch:
-                self.number=v
-        self.fMain.destroy()
-        self.loginL.destroy()
-        self.loginE.destroy()
-        self.passwordL.destroy()
-        self.passwordE.destroy()
-        self.l1.destroy()
-        self.confirmB.destroy()
-        mainMenu=MainFrame(self.master, self.number)
-
-class MainFrame(StartFrame):
-    def __init__(self, master, number):
-        #Create frame
-        self.number = number
-        self.master = master
+        self.master.iconbitmap("C:/Users/bkwia/Desktop/python/bankGUI/data/bank.ico")
         self.master.title("BANK")
         self.master.minsize(1000, 600)
         self.master.maxsize(1000, 600)
+        self.number = number
         self.fMainB = Frame(self.master, bg="#D2D2D2")
         self.fMainB.place(width=1000, height=600)
         self.fNav = Frame(self.fMainB, bg="#83AD87")
@@ -89,8 +44,7 @@ class MainFrame(StartFrame):
         self.contactB = Button(self.fMainB, text="KONTAKTY",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "Contact(self.master, self.number)" : self.choiceMenu(choice))
         self.historyB = Button(self.fMainB, text="HISTORIA",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "History(self.master, self.number)" : self.choiceMenu(choice))
         self.infoB = Button(self.fMainB, text="KONTO",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "Info(self.master, self.number)" : self.choiceMenu(choice))
-        self.settingsB = Button(self.fMainB, text="USTAWIENIA", bg="#FFF8F8", font=("K2D", 6, "bold"), command= lambda: self.settings() )
-        self.logoutB = Button(self.fMainB, text="WOLOGUJ",bg="#FFF8F8", font=("K2D", 8, "bold"), command= lambda: self.logout() )
+        self.settingsB = Button(self.fMainB, text="USTAWIENIA", bg="#FFF8F8", font=("K2D", 6, "bold"), command= lambda: self.settings())
         self.exitB = Button(self.fMainB, text="WYJDŹ",bg="#FFF8F8", font=("K2D", 8, "bold"), command= lambda: self.exitF())
         self.logo.place(x=160, y=0, width=840, height=90)
         self.accountBalanceL.place(x=230, y=114, width=700, height=200)
@@ -99,8 +53,7 @@ class MainFrame(StartFrame):
         self.historyB.place(x=30, y=226, width=100, height=80)
         self.infoB.place(x=30, y=328, width=100, height=80) 
         self.settingsB.place(x=50, y=476, width=60, height=40)
-        self.logoutB.place(x=10, y=529, width=60, height=40)
-        self.exitB.place(x=90, y=529, width=60, height=40)
+        self.exitB.place(x=50, y=530, width=60, height=40)
         self.fMainB.mainloop()
 
     def choiceMenu(self, choice):
@@ -111,7 +64,6 @@ class MainFrame(StartFrame):
         self.transferB.destroy()
         self.historyB.destroy()
         self.infoB.destroy()
-        self.logoutB.destroy()
         self.exitB.destroy()
         self.settingsB.destroy()
         self.contactB.destroy()
@@ -130,21 +82,6 @@ class MainFrame(StartFrame):
         #Options
         self.returnB = Button(self.fSettings, text="POWRÓT", bg="#FFF8F8", font=("K2D", 12, "bold") ,command=lambda: self.fSettings.destroy())
         self.returnB.place(x=90, y=350, width=100, height=40)
-
-
-
-    def logout(self):
-        #Destroy Menu GUI
-        self.fMainB.destroy()
-        self.logo.destroy()
-        self.accountBalanceL.destroy()
-        self.transferB.destroy()
-        self.historyB.destroy()
-        self.infoB.destroy()
-        self.logoutB.destroy()
-        self.exitB.destroy()
-        self.contactB.destroy()
-        StartFrame.__init__(self, self.master) 
     
     def exitF(self):
         self.logo.destroy()
@@ -152,7 +89,6 @@ class MainFrame(StartFrame):
         self.transferB.destroy()
         self.historyB.destroy()
         self.infoB.destroy()
-        self.logoutB.destroy()
         self.exitB.destroy()
         self.contactB.destroy()
         self.settingsB.destroy()
@@ -263,7 +199,7 @@ class Info(MainFrame):
         try:
             myBase = p.connect(host="localhost", user="root", db="bank")
         except:
-            self.connectionErrorL = Label(self.fMainC, text="Nie udało się połączyć z bazą danych", font=("K2D", 24, "bold"), bg="#C4C4C4" )
+            self.connectionErrorL = Label(self.fMainI, text="Nie udało się połączyć z bazą danych", font=("K2D", 24, "bold"), bg="#C4C4C4" )
             self.connectionErrorL.place(x=305, y=291, width=550, height=100)
             self.master.after(4000, self.master.destroy)
         cursor = myBase.cursor()
@@ -665,8 +601,5 @@ class Transfer (MainFrame):
         self.returnB.destroy()
         MainFrame.__init__(self, self.master, self.number)
 
-if __name__ == "__main__":
-    root = Tk()  
-    root.iconbitmap("C:/Users/bkwia/Desktop/python/bankGUI/data/bank.ico")
-    framePin = StartFrame(root)
-    root.mainloop()
+
+
