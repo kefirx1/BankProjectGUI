@@ -22,9 +22,11 @@ def authentication(master, loginE, passwordE, l1):
         if passwordB !=temp:
             cursor.execute("SELECT number FROM data WHERE login in ('{}')".format(loginE.get()))
             number=cursor.fetchall()
+            cursor.execute("SELECT typeOfAccount FROM data WHERE login = '{}'".format(loginE.get()))
+            typeOfAccount = cursor.fetchall()
             cursor.close()
             myBase.close()
-            return number
+            return [number, typeOfAccount]
         else:
             l1.config(text="ZŁE HASŁO")
     else:

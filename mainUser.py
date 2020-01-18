@@ -1,5 +1,5 @@
 from tkinter import *
-import time, sys
+import time
 import pymysql as p
 
 class MainFrame():
@@ -40,18 +40,10 @@ class MainFrame():
         
         self.logo = Label(self.fMainB, text="NARODOWY BANK", font=("K2D", 48, "bold"), bg="#E0E0E0" )
         self.accountBalanceL = Label(self.fMainB, text="DOSTĘPNE ŚRODKI: {} zł".format(self.accountBalance), font=("K2D", 30, "bold"), bg="#C4C4C4")
-        self.transferB = Button(self.fMainB, text="PRZELEW",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "Transfer(self.master, self.number)" : self.choiceMenu(choice))
-        self.contactB = Button(self.fMainB, text="KONTAKTY",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "Contact(self.master, self.number)" : self.choiceMenu(choice))
-        self.historyB = Button(self.fMainB, text="HISTORIA",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "History(self.master, self.number)" : self.choiceMenu(choice))
-        self.infoB = Button(self.fMainB, text="KONTO",bg="#FFF8F8", font=("K2D", 12, "bold"), command=lambda choice = "Info(self.master, self.number)" : self.choiceMenu(choice))
         self.settingsB = Button(self.fMainB, text="USTAWIENIA", bg="#FFF8F8", font=("K2D", 6, "bold"), command= lambda: self.settings())
         self.exitB = Button(self.fMainB, text="WYJDŹ",bg="#FFF8F8", font=("K2D", 8, "bold"), command= lambda: self.exitF())
         self.logo.place(x=160, y=0, width=840, height=90)
         self.accountBalanceL.place(x=230, y=114, width=700, height=200)
-        self.transferB.place(x=30, y=22, width=100, height=80)
-        self.contactB.place(x=30, y=124, width=100, height=80)
-        self.historyB.place(x=30, y=226, width=100, height=80)
-        self.infoB.place(x=30, y=328, width=100, height=80) 
         self.settingsB.place(x=50, y=476, width=60, height=40)
         self.exitB.place(x=50, y=530, width=60, height=40)
         self.fMainB.mainloop()
@@ -61,12 +53,8 @@ class MainFrame():
         self.fMainB.destroy()
         self.logo.destroy()
         self.accountBalanceL.destroy()
-        self.transferB.destroy()
-        self.historyB.destroy()
-        self.infoB.destroy()
         self.exitB.destroy()
         self.settingsB.destroy()
-        self.contactB.destroy()
         objectM = eval(choice)
     
     def settings(self):
@@ -86,11 +74,7 @@ class MainFrame():
     def exitF(self):
         self.logo.destroy()
         self.accountBalanceL.destroy()
-        self.transferB.destroy()
-        self.historyB.destroy()
-        self.infoB.destroy()
         self.exitB.destroy()
-        self.contactB.destroy()
         self.settingsB.destroy()
         self.goodbayL = Label(self.fMainB, text="ŻEGNAMY", font=("K2D", 30, "bold"), bg="#C4C4C4")
         self.goodbayL.place(x=230, y=114, width=700, height=200)
@@ -547,9 +531,6 @@ class Transfer (MainFrame):
             self.errorLabel.place(x=357, y=432, width=446, height=42)
             return
         else:
-            self.transferL = Label(self.fMainT, text="Wysyłanie przelewu pod numer: {}, o kwocie: {} zł, z komentarzem: {}".format(self.nrOfTE.get(),self.howMuchE.get(), self.comE.get()), font=("K2D", 10, "bold"), bg="#C4C4C4")
-            self.transferL.place(x=357, y=432, width=446, height=42)
-
             self.cursor.execute("SELECT accountNumber FROM data WHERE accountNumber= '{}' ".format(self.nrOfTE.get()))
             self.nrOfTDB = self.cursor.fetchall()
             for ch in self.nrOfTDB:
@@ -594,10 +575,6 @@ class Transfer (MainFrame):
         self.comL.destroy()
         self.comE.destroy()
         self.confirmB.destroy()
-        try:
-            self.transferL.destroy()
-        except:
-            pass
         self.returnB.destroy()
         MainFrame.__init__(self, self.master, self.number)
 

@@ -1,7 +1,8 @@
-from tkinter import *
+from tkinter import Frame, Label, Tk, Button, Entry, Listbox
 import data.start
 import pymysql as p
 from mainUser import MainFrame
+from mainAdmin import AdminMainFrame
 
 class StartFrame():
     def __init__(self, master):
@@ -34,10 +35,15 @@ class StartFrame():
 
 
     def checkLogin(self):
-        self.number = data.start.authentication(self.master,self.loginE, self.passwordE, self.l1)
+        self.numberAType = data.start.authentication(self.master,self.loginE, self.passwordE, self.l1)
+        self.number = self.numberAType[0]
+        self.type = self.numberAType[1]
         for ch in self.number:
             for v in ch:
                 self.number=v
+        for ch in self.type:
+            for v in ch:
+                self.type=v
         self.fMain.destroy()
         self.fUp.destroy()
         self.logo.destroy()
@@ -48,8 +54,12 @@ class StartFrame():
         self.l1.destroy()
         self.confirmB.destroy()
         self.exitB.destroy()
-        mainMenu=MainFrame(self.master, self.number)
-
+        if (self.type=="user"):
+            mainMenu=MainFrame(self.master, self.number)
+        elif (self.type=="admin"):
+            adminMenu=AdminMainFrame(self.master, self.number)
+        else:
+            print("Error")
 if __name__ == "__main__":
     root = Tk()  
     root.iconbitmap("C:/Users/bkwia/Desktop/python/bankGUI/data/bank.ico")
