@@ -20,6 +20,14 @@ class MainFrame():
         self.fUp.place(x=160, y=0, width=840, height=90)
         self.fContainerBallance = Frame(self.fMainB, bg="#C4C4C4")
         self.fContainerBallance.place(x=230, y=114, width=700, height=200)
+        
+        #Image
+        self.imageExit = PhotoImage(file = "C:/Users/bkwia/Desktop/python/bankGUI/data/exitImage.png")
+        self.imageSettings = PhotoImage(file = "C:/Users/bkwia/Desktop/python/bankGUI/data/settingsImage.png")
+        self.imageTransfer = PhotoImage(file = "C:/Users/bkwia/Desktop/python/bankGUI/data/transferImage.png")
+        self.imageContact = PhotoImage(file="C:/Users/bkwia/Desktop/python/bankGUI/data/contactsImage.png")
+        self.imageHistory = PhotoImage(file="C:/Users/bkwia/Desktop/python/bankGUI/data/historyImage.png")
+        self.imageInfo = PhotoImage(file="C:/Users/bkwia/Desktop/python/bankGUI/data/myAccountImage.png")
         #Connect with data base
         try:
             myBase = p.connect(host="localhost", user="root", db="bank")
@@ -37,15 +45,45 @@ class MainFrame():
                 self.accountBalance=v
 
         #Menu GUI
+        self.transferF = Frame(self.fMainB, bg="#C4C4C4")
+        self.contactF = Frame(self.fMainB, bg="#C4C4C4")
+        self.historyF = Frame(self.fMainB, bg="#C4C4C4")
+        self.infoF = Frame(self.fMainB, bg="#C4C4C4")
+        self.button5 = Frame(self.fMainB, bg="#C4C4C4")
+        self.button6 = Frame(self.fMainB, bg="#C4C4C4")
+        self.button7 = Frame(self.fMainB, bg="#C4C4C4")
+        self.button8 = Frame(self.fMainB, bg="#C4C4C4")
+        self.transferL = Label(self.fMainB, image=self.imageTransfer, bg="#C4C4C4")
+        self.transferL.bind("<Button-1>", lambda event ,choice = "Transfer(self.master, self.number)" : self.choiceMenu(choice))
+        self.contactL = Label(self.fMainB, image=self.imageContact, bg="#C4C4C4")
+        self.contactL.bind("<Button-1>", lambda event ,choice = "Contact(self.master, self.number)" : self.choiceMenu(choice))
+        self.historyL = Label(self.fMainB, image=self.imageHistory, bg="#C4C4C4")
+        self.historyL.bind("<Button-1>", lambda event ,choice = "History(self.master, self.number)" : self.choiceMenu(choice))
+        self.infoL = Label(self.fMainB, image=self.imageInfo, bg="#C4C4C4")
+        self.infoL.bind("<Button-1>", lambda event ,choice = "Info(self.master, self.number)" : self.choiceMenu(choice))
+        self.transferF.place(x=172, y=322, width=198, height=128)
+        self.contactF.place(x=378, y=322, width=198, height=128)
+        self.historyF.place(x=584, y=322, width=198, height=128)
+        self.infoF.place(x=790, y=322, width=198, height=128)
+        self.button5.place(x=172, y=464, width=198, height=128)
+        self.button6.place(x=378, y=464, width=198, height=128)
+        self.button7.place(x=584, y=464, width=198, height=128)
+        self.button8.place(x=790, y=464, width=198, height=128)
+        self.transferL.place(x=203, y=322, height=128)
+        self.contactL.place(x=419, y=332)
+        self.historyL.place(x=629, y=329)
+        self.infoL.place(x=840, y=328)
         
         self.logo = Label(self.fMainB, text="NARODOWY BANK", font=("K2D", 48, "bold"), bg="#E0E0E0" )
         self.accountBalanceL = Label(self.fMainB, text="DOSTĘPNE ŚRODKI: {} zł".format(self.accountBalance), font=("K2D", 30, "bold"), bg="#C4C4C4")
-        self.settingsB = Button(self.fMainB, text="USTAWIENIA", bg="#FFF8F8", font=("K2D", 6, "bold"), command= lambda: self.settings())
-        self.exitB = Button(self.fMainB, text="WYJDŹ",bg="#FFF8F8", font=("K2D", 8, "bold"), command= lambda: self.exitF())
+        self.settingsB = Label(self.fMainB, image=self.imageSettings, bg="#83AD87")
+        self.exitB = Label(self.fMainB, image=self.imageExit, bg="#83AD87")
+        self.settingsB.bind("<Button-1>", self.settings)
+        self.exitB.bind("<Button-1>", self.exitF)
         self.logo.place(x=160, y=0, width=840, height=90)
         self.accountBalanceL.place(x=230, y=114, width=700, height=200)
-        self.settingsB.place(x=50, y=476, width=60, height=40)
-        self.exitB.place(x=50, y=530, width=60, height=40)
+        self.settingsB.place(x=48, y=14, width=64, height=63)
+        self.exitB.place(x=48, y=528, width=64, height=50)
         self.fMainB.mainloop()
 
     def choiceMenu(self, choice):
@@ -55,9 +93,13 @@ class MainFrame():
         self.accountBalanceL.destroy()
         self.exitB.destroy()
         self.settingsB.destroy()
+        self.transferL.destroy()
+        self.contactL.destroy()
+        self.historyL.destroy()
+        self.infoL.destroy()
         objectM = eval(choice)
     
-    def settings(self):
+    def settings(self, event):
         #Create frame
         self.fSettings = Toplevel(self.master, bg="#D2D2D2")
         self.fSettings.minsize(280, 400)
@@ -71,11 +113,15 @@ class MainFrame():
         self.returnB = Button(self.fSettings, text="POWRÓT", bg="#FFF8F8", font=("K2D", 12, "bold") ,command=lambda: self.fSettings.destroy())
         self.returnB.place(x=90, y=350, width=100, height=40)
     
-    def exitF(self):
+    def exitF(self, event):
         self.logo.destroy()
         self.accountBalanceL.destroy()
         self.exitB.destroy()
         self.settingsB.destroy()
+        self.transferL.destroy()
+        self.contactL.destroy()
+        self.historyL.destroy()
+        self.infoL.destroy()
         self.goodbayL = Label(self.fMainB, text="ŻEGNAMY", font=("K2D", 30, "bold"), bg="#C4C4C4")
         self.goodbayL.place(x=230, y=114, width=700, height=200)
         self.master.after(2000, self.master.destroy)
@@ -96,6 +142,7 @@ class Contact(MainFrame):
 
         #Variables
         self.contact = []
+        self.imageReturn = PhotoImage(file = "C:/Users/bkwia/Desktop/python/bankGUI/data/backImage.png")
         #Connect with data base
         try:
             myBase = p.connect(host="localhost", user="root", db="bank")
@@ -142,11 +189,12 @@ class Contact(MainFrame):
             self.contactList.place(x=320, y=116, width=520, height=450)
             self.scrollbarContact.config( command = self.contactList.yview )
 
-        self.returnB = Button(self.fMainC, text="POWRÓT", bg="#FFF8F8", font=("K2D", 18, "bold") ,command=lambda: self.returnF())
-        self.returnB.place(x=20, y=519, width=120, height=62)
+        self.returnB = Label(self.fMainC, image=self.imageReturn, bg="#83AD87")
+        self.returnB.bind("<Button-1>", self.returnF)
+        self.returnB.place(x=37, y=515, width=85, height=85)
             
 
-    def returnF(self):
+    def returnF(self, event):
         self.fMainC.destroy()
         try:
             self.scrollbarContact.destroy()
@@ -168,6 +216,7 @@ class Info(MainFrame):
     def __init__(self, master,number):
         self.master = master
         self.number = number
+        self.imageReturn = PhotoImage(file = "C:/Users/bkwia/Desktop/python/bankGUI/data/backImage.png")
         #Create frame
         self.fMainI = Frame(self.master, bg="#D2D2D2")
         self.fMainI.place(width=1000, height=600)
@@ -248,7 +297,6 @@ class Info(MainFrame):
         self.surnameL = Label(self.fMainI, text="NAZWISKO - {}".format(self.surname), font=("K2D", 16, "bold"), bg="#C4C4C4")
         self.dateOfBirthL = Label(self.fMainI, text="DATA URODZENIA - {}".format(self.dateOfBirth), font=("K2D", 16, "bold"), bg="#C4C4C4")
         self.accountNumberL = Label(self.fMainI, text="NUMER KONTA - {}".format(self.accountNumber), font=("K2D", 14, "bold"), bg="#C4C4C4")
-        self.backB = Button(self.fMainI, text="POWRÓT", command= lambda:self.returnF(), font=("K2D", 16, "bold"), bg="#FFF8F8")
         self.loginL.place(x=320, y=141, width=520, height=50)
         self.passwordL.place(x=320, y=191, width=520, height=50)
         self.pinL.place(x=320, y=241, width=520, height=50)
@@ -257,10 +305,12 @@ class Info(MainFrame):
         self.surnameL.place(x=320, y=391, width=520, height=50)
         self.dateOfBirthL.place(x=320, y=441, width=520, height=50)
         self.accountNumberL.place(x=320, y=491, width=520, height=50)
-        self.backB.place(x=20, y=519, width=120, height=62)
+        self.returnB = Label(self.fMainI, image=self.imageReturn, bg="#83AD87")
+        self.returnB.bind("<Button-1>", self.returnF)
+        self.returnB.place(x=37, y=515, width=85, height=85)
 
     
-    def returnF(self):
+    def returnF(self, event):
         self.fMainI.destroy()
         self.loginL.destroy()
         self.passwordL.destroy()
@@ -270,7 +320,7 @@ class Info(MainFrame):
         self.surnameL.destroy()
         self.dateOfBirthL.destroy()
         self.accountNumberL.destroy()
-        self.backB.destroy()
+        self.returnB.destroy()
         MainFrame.__init__(self, self.master, self.number)    
 
     def showPassword(self, event):
@@ -300,6 +350,7 @@ class History (MainFrame):
         accountNumberIncoming = []
         amountIncoming = []
         commentIncoming = []
+        self.imageReturn = PhotoImage(file = "C:/Users/bkwia/Desktop/python/bankGUI/data/backImage.png")
             
         #Connect with data base
         try:
@@ -399,6 +450,7 @@ class History (MainFrame):
             self.historyListOutgoing.insert(END, "Adres: {}".format(accountNumberOutgoing[i]))
             self.historyListOutgoing.insert(END, "Kwota: {} zł".format(amountOutgoing[i]))
             self.historyListOutgoing.insert(END, "Komentarz: {}".format(commentOutgoing[i]))
+            self.historyListOutgoing.insert(END, "---------------------------------------------------------")
         self.historyListOutgoing.place(x=201, y=154, width=300, height=400)
         self.scrollbarOutgoing.config( command = self.historyListOutgoing.yview )
         #Print history Incoming
@@ -411,10 +463,11 @@ class History (MainFrame):
         self.historyListIncoming.place(x=629, y=154, width=300, height=400)
         self.scrollbarIncoming.config( command = self.historyListIncoming.yview )
 
-        self.returnB = Button(self.fMainH, text="Powrót", command = lambda: self.returnF(), font=("K2D", 16, "bold"), bg="#FFF8F8")
-        self.returnB.place(x=20, y=519, width=120, height=62)
+        self.returnB = Label(self.fMainH, image=self.imageReturn, bg="#83AD87")
+        self.returnB.bind("<Button-1>", self.returnF)
+        self.returnB.place(x=37, y=515, width=85, height=85)
 
-    def returnF(self):
+    def returnF(self, event):
 
         self.fMainH.destroy()
         self.scrollbarOutgoing.destroy()
@@ -432,6 +485,7 @@ class Transfer (MainFrame):
     def __init__(self, master, number):
         self.master = master
         self.number = number
+        self.imageReturn = PhotoImage(file = "C:/Users/bkwia/Desktop/python/bankGUI/data/backImage.png")
         try: 
             self.errorLabel.destroy()
         except:
@@ -496,7 +550,6 @@ class Transfer (MainFrame):
             self.comL = Label(self.fMainT, text="Komentarz do przelewu", font=("K2D", 16, "bold"), bg="#C4C4C4")
             self.comE = Entry(self.fMainT, font=("K2D", 13, "bold"), bg="#FFF8F8")
             self.confirmB = Button(self.fMainT, text="Wyślij", command = lambda: self.confirmF(), font=("K2D", 16, "bold"), bg="#FFF8F8")
-            self.returnB = Button(self.fMainT, text="Powrót", command = lambda: self.returnF(), font=("K2D", 16, "bold"), bg="#FFF8F8")
             self.accountBalanceLT.place(x=320, y=116, width=520, height=50)
             self.contactL.place(x=320, y=192, width=260, height=60)
             self.contactE.place(x=580, y=202, width=241, height=50)
@@ -507,7 +560,9 @@ class Transfer (MainFrame):
             self.comL.place(x=320, y=372, width=260, height=60)
             self.comE.place(x=580, y=382, width=241, height=50)
             self.confirmB.place(x=480, y=474, width=200, height=50)
-            self.returnB.place(x=20, y=519, width=120, height=62)
+            self.returnB = Label(self.fMainT, image=self.imageReturn, bg="#83AD87")
+            self.returnB.bind("<Button-1>", self.returnF)
+            self.returnB.place(x=37, y=515, width=85, height=85)
 
 
     def checkContact(self, event):
@@ -561,9 +616,23 @@ class Transfer (MainFrame):
             self.myBaseT.commit()
             self.cursor.close()
             self.myBaseT.close()
-            self.master.after(2000, self.returnF())
+            self.master.after(2000, self.returnF2())
 
-    def returnF(self):
+    def returnF(self, event):
+        self.fMainT.destroy()
+        self.accountBalanceLT.destroy()
+        self.nrOfTL.destroy()
+        self.nrOfTE.destroy()
+        self.contactL.destroy()
+        self.contactE.destroy()
+        self.howMuchL.destroy()
+        self.howMuchE.destroy()
+        self.comL.destroy()
+        self.comE.destroy()
+        self.confirmB.destroy()
+        self.returnB.destroy()
+        MainFrame.__init__(self, self.master, self.number)
+    def returnF2(self):
         self.fMainT.destroy()
         self.accountBalanceLT.destroy()
         self.nrOfTL.destroy()
