@@ -2,7 +2,7 @@ import random
 
 def accountNumberCreate():
     #Variables
-    minRandom = 0000000000000000
+    minRandom = 1000000000000000
     maxRandom = 9999999999999999
     countryCode = "PL"
     tCheckSum = "00"
@@ -21,7 +21,7 @@ def accountNumberCreate():
     beforeIBANT5 = int(beforeIBANT4) % 97
     beforeIBANT6 = 98-beforeIBANT5
     if beforeIBANT6<10:
-        beforeIBANT6*=10
+        beforeIBANT6+=10
     checkSum = str(beforeIBANT6)
     IBAN=countryCode+checkSum+bankNumberFull+customerInvoice
     return IBAN
@@ -35,3 +35,4 @@ def accountNumberCheck(IBAN):
     IBANTemp4 = int(IBANTemp3) % 97
     if IBANTemp4 == 1:
         return True
+
